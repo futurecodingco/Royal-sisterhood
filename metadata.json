@@ -1,0 +1,6 @@
+{
+  "name": "Royal Sisterhood AK 1 to 4 Bloodline",
+  "description": "Institutional website and donor portal for Royal Sisterhood AK 1 to 4 Bloodline, led by the Royal Princesses of King Adam Kok V in Mid Ennerdale, Johannesburg.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --royal-plum: #4A1525;
+    --heritage-gold: #C59B27;
+    --earth-terracotta: #B85D3B;
+    --canvas-cream: #FAF8F5;
+    --charcoal-ink: #1F1F1F;
+  }
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Subtle heritage geometric pattern for banner accents */
+.bg-heritage-pattern {
+  background-color: #4A1525;
+  background-image: radial-gradient(#C59B27 0.75px, transparent 0.75px), radial-gradient(#C59B27 0.75px, #4A1525 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.bg-cream-pattern {
+  background-color: #FAF8F5;
+  background-image: radial-gradient(#E8E1D5 0.65px, transparent 0.65px);
+  background-size: 24px 24px;
+}
