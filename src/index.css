@@ -19,6 +19,9 @@
   body {
     background-color: var(--canvas-cream);
     color: var(--charcoal-ink);
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   :focus-visible {
@@ -28,15 +31,22 @@
 }
 
 .font-cinzel {
-  font-family: 'Cinzel', Georgia, serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: -0.012em;
+  font-feature-settings: "liga" 1, "kern" 1;
 }
 
 .font-playfair {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-feature-settings: "liga" 1, "kern" 1;
 }
 
 .font-sans {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
 .text-balance {
