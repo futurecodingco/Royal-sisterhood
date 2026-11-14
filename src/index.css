@@ -3,15 +3,32 @@
 @layer base {
   :root {
     --royal-plum: #4A1525;
+    --royal-plum-deep: #2D0B16;
     --heritage-gold: #C59B27;
+    --heritage-gold-soft: #F3C969;
     --earth-terracotta: #B85D3B;
     --canvas-cream: #FAF8F5;
+    --surface-limestone: #F3EFE7;
     --charcoal-ink: #1F1F1F;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--canvas-cream);
+    color: var(--charcoal-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid #C59B27;
+    outline-offset: 2px;
   }
 }
 
 .font-cinzel {
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', Georgia, serif;
 }
 
 .font-playfair {
@@ -22,16 +39,181 @@
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
-/* Subtle heritage geometric pattern for banner accents */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Subtle heritage geometric pattern for sovereign banner surfaces */
 .bg-heritage-pattern {
   background-color: #4A1525;
-  background-image: radial-gradient(#C59B27 0.75px, transparent 0.75px), radial-gradient(#C59B27 0.75px, #4A1525 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
+  background-image:
+    radial-gradient(rgba(197, 155, 39, 0.35) 0.75px, transparent 0.75px),
+    radial-gradient(rgba(197, 155, 39, 0.25) 0.75px, #4A1525 0.75px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
 }
 
 .bg-cream-pattern {
   background-color: #FAF8F5;
-  background-image: radial-gradient(#E8E1D5 0.65px, transparent 0.65px);
+  background-image: radial-gradient(rgba(197, 155, 39, 0.14) 0.65px, transparent 0.65px);
   background-size: 24px 24px;
+}
+
+/* Tactile card & button micro-interaction curves (compositor-only) */
+.ease-tactile {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-interactive {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms ease;
+}
+
+.card-interactive:hover {
+  transform: translateY(-3px);
+}
+
+.btn-tactile {
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-tactile:active {
+  transform: scale(0.98);
+}
+
+/* Custom Range Slider for Impact Simulator */
+input[type="range"].royal-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C59B27 0%, #8B1E3F 100%);
+  outline: none;
+}
+
+input[type="range"].royal-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #F3C969;
+  border: 2px solid #4A1525;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+input[type="range"].royal-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+
+input[type="range"].royal-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #F3C969;
+  border: 2px solid #4A1525;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Evening Royal Velvet Atmosphere Theme */
+.theme-velvet {
+  --canvas-cream: #14060B;
+  --surface-limestone: #200A12;
+  --charcoal-ink: #F5EFE6;
+  background-color: #14060B !important;
+  color: #F5EFE6 !important;
+}
+
+.theme-velvet header.sticky {
+  background-color: rgba(24, 7, 13, 0.94) !important;
+  border-color: rgba(197, 155, 39, 0.28) !important;
+}
+
+.theme-velvet header .text-\[\#4A1525\],
+.theme-velvet header .text-stone-700 {
+  color: #F5EFE6 !important;
+}
+
+.theme-velvet header .hover\:text-\[\#4A1525\]:hover {
+  color: #F3C969 !important;
+}
+
+.theme-velvet main .bg-white:not(.preserve-light) {
+  background-color: #210B13 !important;
+  color: #F5EFE6 !important;
+}
+
+.theme-velvet main .bg-\[\#FAF8F5\]:not(.preserve-light) {
+  background-color: #19070E !important;
+}
+
+.theme-velvet main .bg-\[\#F3EFE7\]:not(.preserve-light) {
+  background-color: #280E18 !important;
+}
+
+.theme-velvet main .bg-stone-100:not(.preserve-light) {
+  background-color: #2B101A !important;
+  color: #F5EFE6 !important;
+}
+
+.theme-velvet main .border-stone-200:not(.preserve-light),
+.theme-velvet main .border-stone-100:not(.preserve-light),
+.theme-velvet main .border-stone-300:not(.preserve-light),
+.theme-velvet main .border-\[\#E5DDD0\]:not(.preserve-light),
+.theme-velvet main .divide-stone-200:not(.preserve-light) > * + *,
+.theme-velvet main .divide-stone-300\/60:not(.preserve-light) > * + * {
+  border-color: rgba(197, 155, 39, 0.24) !important;
+}
+
+.theme-velvet main .text-\[\#4A1525\]:not(.preserve-ink) {
+  color: #F3C969 !important;
+}
+
+.theme-velvet main .text-\[\#8B1E3F\]:not(.preserve-ink) {
+  color: #F3C969 !important;
+}
+
+.theme-velvet main .text-stone-900:not(.preserve-ink),
+.theme-velvet main .text-stone-800:not(.preserve-ink) {
+  color: #FAF8F5 !important;
+}
+
+.theme-velvet main .text-stone-700:not(.preserve-ink),
+.theme-velvet main .text-stone-600:not(.preserve-ink) {
+  color: #E5DDD0 !important;
+}
+
+.theme-velvet main .text-stone-500:not(.preserve-ink) {
+  color: #C7B9AD !important;
+}
+
+.theme-velvet main input:not([type="range"]),
+.theme-velvet main textarea,
+.theme-velvet main select {
+  background-color: #14060B !important;
+  color: #FAF8F5 !important;
+  border-color: rgba(197, 155, 39, 0.35) !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-interactive:hover,
+  .btn-tactile:active {
+    transform: none !important;
+  }
 }

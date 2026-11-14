@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2, Crown, ShieldAlert, Clock, Building, Compass } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, Crown, Clock, Building, Copy, Check } from "lucide-react";
 import { ROYAL_ORGANIZATION } from "../data/organizationData";
+import { PageHeroBanner } from "../components/PageHeroBanner";
 
 export const ContactPage: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [referenceId, setReferenceId] = useState<string | null>(null);
+  const [copiedAddress, setCopiedAddress] = useState(false);
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ export const ContactPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setReferenceId(`RS-SEC-${Math.floor(1000 + Math.random() * 9000)}`);
   };
 
   const handleNewsletter = (e: React.FormEvent) => {
@@ -27,64 +29,81 @@ export const ContactPage: React.FC = () => {
     setNewsletterSubscribed(true);
   };
 
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(
+      `${ROYAL_ORGANIZATION.headquarters.address}, ${ROYAL_ORGANIZATION.headquarters.city}, ${ROYAL_ORGANIZATION.headquarters.province}, ${ROYAL_ORGANIZATION.headquarters.postalCode}`
+    );
+    setCopiedAddress(true);
+    setTimeout(() => setCopiedAddress(false), 2000);
+  };
+
+  const inquiryMailto = `mailto:${ROYAL_ORGANIZATION.contactEmail}?subject=${encodeURIComponent(
+    `[${referenceId || "INQUIRY"}] ${formData.subject || "Secretariat Inquiry"}`
+  )}&body=${encodeURIComponent(
+    `Reference: ${referenceId}\nCategory: ${formData.category}\nName: ${formData.name}\nOrganisation: ${formData.organization || "Individual"}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nDetails:\n${formData.message}`
+  )}`;
+
   return (
-    <div className="space-y-16 pb-16">
-      {/* Page Header */}
-      <section className="bg-gradient-to-b from-[#340B18] via-[#4A1525] to-[#2D0B16] text-white py-16 px-4 sm:px-6 border-b border-[#C59B27]/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-heritage-pattern opacity-10 pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/10 text-[#F3C969] text-xs font-semibold uppercase tracking-wider">
-            <Crown className="w-3.5 h-3.5" />
-            <span>Royal Secretariat & Operational Headquarters</span>
-          </div>
-          <h1 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
-            Connect With the Royal House
-          </h1>
-          <p className="text-sm sm:text-base text-stone-200 max-w-3xl leading-relaxed font-light">
-            Headquartered in Mid Ennerdale, Johannesburg. Reach the Royal Princesses, our strategic co-delivery directors, or the emergency community desk.
-          </p>
-        </div>
-      </section>
+    <div className="space-y-16 pb-20">
+      <PageHeroBanner
+        kickerIcon={<Crown className="w-4 h-4 shrink-0" />}
+        kickerText="Royal Secretariat & Operational Headquarters"
+        title="Connect With the Royal House"
+        subtitle="Headquartered in Mid Ennerdale, Johannesburg. Reach the Founding Royal Princesses, our strategic co-delivery directors, or the emergency community desk."
+      />
 
       {/* Main Grid: Form on Left, Location & Office on Right */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Form (7 cols) */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-stone-200 p-8 shadow-sm">
-            <span className="text-xs uppercase tracking-widest font-bold text-[#8B1E3F]">
+          <div className="lg:col-span-7 bg-white rounded-xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+            <span className="text-xs uppercase tracking-wider font-semibold text-[#8B1E3F]">
               Direct Inquiries
             </span>
             <h2 className="font-cinzel text-2xl font-bold text-[#4A1525] mt-1 mb-2">
               Secretariat Inquiry Intake
             </h2>
             <p className="text-xs text-stone-600 mb-6 leading-relaxed">
-              Inquiries are reviewed daily by the executive secretariat and routed directly to the appropriate directorate.
+              Prepare a structured inquiry for the executive secretariat, or reach our directors directly by telephone.
             </p>
 
-            {submitted ? (
-              <div className="p-8 bg-emerald-50 rounded-xl border border-emerald-200 text-center space-y-4">
-                <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h3 className="font-bold text-stone-900 text-lg">Inquiry Received by Royal Secretariat</h3>
-                <p className="text-xs text-stone-700 leading-relaxed max-w-md mx-auto">
-                  Thank you for contacting Royal Sisterhood AK 1 to 4 Bloodline. A formal response will be dispatched to your email address within 24 to 48 hours.
+            {referenceId ? (
+              <div className="p-6 bg-[#FAF8F5] rounded-lg border border-emerald-300 space-y-4">
+                <div className="flex items-center gap-2 text-emerald-800 font-semibold">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-700" />
+                  <span>Secretariat Brief Prepared · {referenceId}</span>
+                </div>
+                <p className="text-xs text-stone-700 leading-relaxed">
+                  Click below to transmit your inquiry directly to{" "}
+                  <strong className="text-[#4A1525]">{ROYAL_ORGANIZATION.contactEmail}</strong> via your email client, or call Princess Maggie Kok Gibbs (081 302 7763) / Princess Cornelia Eva Julius (066 586 2829).
                 </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="px-5 py-2 bg-[#4A1525] text-white text-xs font-semibold rounded"
-                >
-                  Send Another Inquiry
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href={inquiryMailto}
+                    className="px-5 py-2.5 bg-[#4A1525] hover:bg-[#340C18] text-white text-xs font-semibold rounded-md inline-flex items-center gap-1.5"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#F3C969]" />
+                    <span>Open & Send Email</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setReferenceId(null)}
+                    className="px-4 py-2.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-800 text-xs font-medium rounded-md cursor-pointer"
+                  >
+                    Edit or Send Another
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
                     Inquiry Classification *
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-white rounded border border-stone-300 text-xs font-medium focus:ring-2 focus:ring-[#4A1525] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white rounded-md border border-stone-300 text-xs font-medium focus:ring-2 focus:ring-[#4A1525] focus:outline-none"
                   >
                     <option value="csi-funding">Corporate CSI / Foundation Grant Due Diligence</option>
                     <option value="strategic-partnership">Strategic Coalition Partnership (MoU)</option>
@@ -106,19 +125,19 @@ export const ContactPage: React.FC = () => {
                       placeholder="Your Full Name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                      className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-stone-700 mb-1">
-                      Organization / Company (Optional)
+                      Organisation / Company (Optional)
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Standard Bank / Anglo / NGO"
+                      placeholder="e.g. Standard Bank / NGO"
                       value={formData.organization}
                       onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                      className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                     />
                   </div>
                 </div>
@@ -134,7 +153,7 @@ export const ContactPage: React.FC = () => {
                       placeholder="contact@domain.co.za"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                      className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                     />
                   </div>
                   <div>
@@ -144,10 +163,10 @@ export const ContactPage: React.FC = () => {
                     <input
                       type="tel"
                       required
-                      placeholder="+27 (0)11 000 0000"
+                      placeholder="+27 11 000 0000"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                      className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs tabular-nums"
                     />
                   </div>
                 </div>
@@ -162,7 +181,7 @@ export const ContactPage: React.FC = () => {
                     placeholder="Brief summary of your inquiry..."
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   />
                 </div>
 
@@ -175,17 +194,17 @@ export const ContactPage: React.FC = () => {
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Provide full background context, proposed dates, or partnership objectives..."
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs resize-none"
+                    placeholder="Provide background context, proposed dates, or partnership objectives..."
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#4A1525] hover:bg-[#340C18] text-white font-bold text-xs uppercase tracking-wider rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 bg-[#4A1525] hover:bg-[#340C18] text-white font-semibold text-xs uppercase tracking-wider rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5 text-[#F3C969]" />
-                  <span>Transmit Inquiry to Secretariat</span>
+                  <span>Prepare Inquiry for Secretariat</span>
                 </button>
               </form>
             )}
@@ -193,8 +212,7 @@ export const ContactPage: React.FC = () => {
 
           {/* Right Location & Secretariat Cards (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Office Profile */}
-            <div className="bg-[#FAF5EE] rounded-2xl border border-[#C59B27]/40 p-6 space-y-4">
+            <div className="bg-[#F3EFE7] rounded-xl border border-[#C59B27]/40 p-6 space-y-4">
               <div className="flex items-center gap-2 text-xs font-bold text-[#4A1525] uppercase tracking-wider">
                 <Building className="w-4 h-4 text-[#C59B27]" />
                 <span>Headquarters & Community Hall</span>
@@ -203,33 +221,45 @@ export const ContactPage: React.FC = () => {
                 Mid Ennerdale Executive Secretariat
               </h3>
 
-              <div className="space-y-3 text-xs text-stone-700">
+              <div className="space-y-3.5 text-xs text-stone-700">
                 <div className="flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="block text-stone-900">Physical Domicile:</strong>
+                  <div className="flex-1">
+                    <strong className="block text-stone-900">Physical Domicile</strong>
                     <span>{ROYAL_ORGANIZATION.headquarters.address}</span>
-                    <span className="block">{ROYAL_ORGANIZATION.headquarters.city}, {ROYAL_ORGANIZATION.headquarters.province}, {ROYAL_ORGANIZATION.headquarters.postalCode}</span>
-                    <span className="text-stone-500 text-[11px] block mt-0.5">Region G, City of Johannesburg Metropolitan Municipality</span>
+                    <span className="block tabular-nums">
+                      {ROYAL_ORGANIZATION.headquarters.city}, {ROYAL_ORGANIZATION.headquarters.province}, {ROYAL_ORGANIZATION.headquarters.postalCode}
+                    </span>
+                    <span className="text-stone-500 text-[11px] block mt-0.5">
+                      Region G, City of Johannesburg Metropolitan Municipality
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyAddress}
+                      className="mt-2 inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-stone-300 rounded text-[11px] font-medium text-stone-700 hover:bg-stone-50 cursor-pointer"
+                    >
+                      {copiedAddress ? <Check className="w-3 h-3 text-emerald-700" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedAddress ? "Address Copied" : "Copy Physical Address"}</span>
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2.5 pt-2 border-t border-stone-300/70">
                   <Mail className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-stone-900">Official Electronic Mail:</strong>
+                    <strong className="block text-stone-900">Official Electronic Mail</strong>
                     <a href={`mailto:${ROYAL_ORGANIZATION.contactEmail}`} className="underline hover:text-[#4A1525]">
                       {ROYAL_ORGANIZATION.contactEmail}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2.5 pt-2 border-t border-stone-300/70">
                   <Phone className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
-                  <div className="space-y-1">
-                    <strong className="block text-stone-900">Founding Directors Direct Contact:</strong>
+                  <div className="space-y-1 tabular-nums">
+                    <strong className="block text-stone-900">Founding Directors Direct Contact</strong>
                     <a href="tel:0813027763" className="block hover:text-[#4A1525] underline">
-                      Princess Maggie Gibbs: 081 302 7763
+                      Princess Maggie Kok Gibbs: 081 302 7763
                     </a>
                     <a href="tel:0665862829" className="block hover:text-[#4A1525] underline">
                       Princess Cornelia Eva Julius: 066 586 2829
@@ -237,59 +267,42 @@ export const ContactPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2.5 pt-2 border-t border-stone-300/70">
                   <Clock className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="block text-stone-900">Operating Hours:</strong>
+                  <div className="tabular-nums">
+                    <strong className="block text-stone-900">Operating Hours</strong>
                     <span>Monday – Friday: 08:30 – 16:30</span>
-                    <span className="block text-[11px] text-stone-500">Emergency GBV desk operational 24/7/365</span>
+                    <span className="block text-[11px] text-stone-500">
+                      Emergency GBV desk operational 24/7/365
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Interactive Map Visual Representation */}
-            <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
-              <div className="p-4 bg-stone-100 border-b border-stone-200 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-800">
-                  <Compass className="w-4 h-4 text-[#4A1525]" />
-                  <span>Johannesburg South / Mid Ennerdale Hub</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#8B1E3F] font-bold">1830 GP</span>
-              </div>
-
-              {/* Stylized Map View */}
-              <div className="h-48 bg-stone-200 relative flex items-center justify-center p-4">
-                <div className="absolute inset-0 bg-neutral-900/10 pointer-events-none" />
-                
-                {/* Visual landmark pin */}
-                <div className="relative text-center p-4 bg-white/95 rounded-xl shadow-lg border border-stone-300 max-w-xs backdrop-blur-sm">
-                  <div className="w-8 h-8 rounded-full bg-[#4A1525] text-[#C59B27] flex items-center justify-center mx-auto mb-1.5 shadow">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <h4 className="font-cinzel text-xs font-bold text-[#4A1525]">
-                    2445 5th Ave, Mid Ennerdale
-                  </h4>
-                  <p className="text-[11px] text-stone-600 mt-0.5">
-                    Central hub for food distribution, women's tech labs, and royal council assemblies.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Newsletter Signup */}
-            <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 space-y-3">
+            {/* Gazette / Direct Updates */}
+            <div className="bg-white rounded-xl border border-stone-200 p-6 space-y-3">
               <h4 className="font-cinzel text-sm font-bold text-[#4A1525]">
                 Quarterly Royal Impact Gazette
               </h4>
-              <p className="text-xs text-stone-600">
-                Receive audited progress reports on our 6 flagship programmes and national Griqua unification updates.
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Receive programme updates across our 6 national flagship initiatives and Griqua unification assemblies.
               </p>
 
               {newsletterSubscribed ? (
-                <div className="p-3 bg-emerald-100 text-emerald-800 rounded text-xs font-medium flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Subscribed successfully to the quarterly gazette.</span>
+                <div className="p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md text-xs font-medium flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Gazette request prepared for {newsletterEmail}</span>
+                  </span>
+                  <a
+                    href={`mailto:${ROYAL_ORGANIZATION.contactEmail}?subject=${encodeURIComponent(
+                      "Quarterly Royal Impact Gazette Subscription"
+                    )}&body=${encodeURIComponent(`Please add ${newsletterEmail} to the Quarterly Royal Impact Gazette distribution list.`)}`}
+                    className="underline font-semibold whitespace-nowrap"
+                  >
+                    Confirm via Email
+                  </a>
                 </div>
               ) : (
                 <form onSubmit={handleNewsletter} className="flex gap-2">
@@ -299,11 +312,11 @@ export const ContactPage: React.FC = () => {
                     placeholder="Enter official email"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="flex-1 px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#4A1525] text-white text-xs font-bold rounded hover:bg-[#340C18] transition-colors"
+                    className="px-4 py-2 bg-[#4A1525] text-white text-xs font-semibold rounded-md hover:bg-[#340C18] transition-colors cursor-pointer whitespace-nowrap"
                   >
                     Subscribe
                   </button>

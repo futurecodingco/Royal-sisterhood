@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { X, ShieldAlert, PhoneCall, Lock, Heart, CheckCircle2, AlertOctagon } from "lucide-react";
-import { EMERGENCY_HELPLINES } from "../data/organizationData";
+import { X, ShieldAlert, PhoneCall, Lock, Heart, CheckCircle2, AlertOctagon, Copy, Check } from "lucide-react";
+import { ROYAL_ORGANIZATION } from "../data/organizationData";
 
 interface ConfidentialHelpModalProps {
   isOpen: boolean;
@@ -11,13 +11,12 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [submitted, setSubmitted] = useState(false);
+  const [referenceId, setReferenceId] = useState<string | null>(null);
+  const [copiedSummary, setCopiedSummary] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     contactMethod: "whatsapp",
     contactInfo: "",
-    province: "Gauteng",
-    locationDetail: "Mid Ennerdale / Region G",
     supportType: "gbv-safe-haven",
     safeTime: "Anytime",
     safeCodeWord: "",
@@ -29,42 +28,81 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    const code = `RS-SAFE-${Math.floor(1000 + Math.random() * 9000)}`;
+    setReferenceId(code);
+  };
+
+  const handleResetAndClose = () => {
+    setReferenceId(null);
+    setFormData({
+      name: "",
+      contactMethod: "whatsapp",
+      contactInfo: "",
+      supportType: "gbv-safe-haven",
+      safeTime: "Anytime",
+      safeCodeWord: "",
+      details: "",
+      isSafeToReply: true,
+    });
+    onClose();
   };
 
   const handleQuickExit = () => {
     window.location.replace("https://www.google.co.za");
   };
 
+  const handleCopyBrief = () => {
+    const summary = [
+      `Confidential Reference: ${referenceId}`,
+      `Name / Pseudonym: ${formData.name}`,
+      `Safe Channel: ${formData.contactMethod} (${formData.contactInfo})`,
+      `Safe Time: ${formData.safeTime}`,
+      `Safe Code Word: ${formData.safeCodeWord || "None specified"}`,
+      `Support Type: ${formData.supportType}`,
+      `Notes: ${formData.details || "N/A"}`,
+    ].join("\n");
+    navigator.clipboard.writeText(summary);
+    setCopiedSummary(true);
+    setTimeout(() => setCopiedSummary(false), 2000);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confidential-help-title"
+    >
       <div className="relative w-full max-w-2xl bg-[#FAF8F5] rounded-xl shadow-2xl border-2 border-[#8B1E3F] flex flex-col overflow-hidden max-h-[90vh]">
         {/* Header */}
         <div className="p-5 bg-[#3B0C1A] text-white flex items-start justify-between border-b border-[#8B1E3F]">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-amber-300 uppercase tracking-wider">
-              <Lock className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-xs font-medium text-amber-300">
+              <Lock className="w-3.5 h-3.5 shrink-0" />
               <span>Confidential & Trauma-Informed Support Desk</span>
             </div>
-            <h3 className="font-cinzel text-xl sm:text-2xl font-bold mt-1 text-white">
+            <h3 id="confidential-help-title" className="font-cinzel text-xl sm:text-2xl font-bold mt-1 text-white">
               Request Emergency or Community Assistance
             </h3>
-            <p className="text-xs text-neutral-300 mt-0.5">
-              Strictly confidential. Handled by accredited pastoral social workers and community safe-space coordinators.
+            <p className="text-xs text-stone-200 mt-0.5">
+              Strictly confidential intake routed to Mid Ennerdale safe-space coordinators and Changing Life Ministries.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
+              type="button"
               onClick={handleQuickExit}
-              className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-bold flex items-center gap-1 shadow cursor-pointer"
+              className="px-3 py-1.5 bg-red-700 hover:bg-red-800 text-white rounded-md text-xs font-bold flex items-center gap-1 cursor-pointer whitespace-nowrap"
               title="Leave site immediately"
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>Quick Exit</span>
             </button>
             <button
+              type="button"
               onClick={onClose}
-              className="p-1 text-neutral-300 hover:text-white rounded hover:bg-white/10"
+              aria-label="Close assistance modal"
+              className="p-1.5 text-stone-300 hover:text-white rounded-md hover:bg-white/10 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -73,50 +111,79 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-5 text-sm text-[#1F1F1F]">
-          {/* Quick Immediate Helpline Callout */}
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between text-xs">
+          {/* Immediate Helpline Callout */}
+          <div className="p-3.5 bg-red-50 border border-red-200 rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2 text-red-900 font-medium">
-              <AlertOctagon className="w-4 h-4 text-red-600 shrink-0" />
-              <span>If you are in immediate physical danger, call the National GBV Command Centre:</span>
+              <AlertOctagon className="w-4 h-4 text-red-700 shrink-0" />
+              <span>If you are in immediate physical danger, call the 24/7 National GBV Command Centre:</span>
             </div>
             <a
               href="tel:0800428428"
-              className="px-3 py-1 bg-red-700 hover:bg-red-800 text-white font-bold rounded flex items-center gap-1 shrink-0 ml-2"
+              className="px-3 py-1.5 bg-red-700 hover:bg-red-800 text-white font-bold rounded-md flex items-center gap-1.5 shrink-0 tabular-nums"
             >
               <PhoneCall className="w-3.5 h-3.5" />
               <span>0800 428 428</span>
             </a>
           </div>
 
-          {submitted ? (
-            <div className="p-6 bg-emerald-50 rounded-lg border border-emerald-200 text-center space-y-3">
-              <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-              <h4 className="font-bold text-stone-900 text-lg">Your Request Has Been Securely Queued</h4>
-              <p className="text-xs text-stone-700 leading-relaxed max-w-md mx-auto">
-                Our support team will contact you using strictly your indicated safe channel and preferred time window. If you specified a safe code word, our caseworker will use it before stating the purpose of the contact.
+          {referenceId ? (
+            <div className="p-6 bg-white rounded-lg border border-emerald-300 space-y-4">
+              <div className="flex items-center gap-2 text-emerald-800 font-semibold text-sm">
+                <CheckCircle2 className="w-5 h-5 text-emerald-700" />
+                <span>Support Intake Prepared · Reference {referenceId}</span>
+              </div>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                For immediate action by our Mid Ennerdale safe-space coordinators, reach out directly using a safe device or call our crisis line. If you specified a safe code word, mention it first.
               </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => {
-                    setSubmitted(false);
-                    onClose();
-                  }}
-                  className="px-5 py-2 bg-[#4A1525] text-white text-xs font-semibold rounded hover:bg-[#340C18]"
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                <a
+                  href="tel:0813027763"
+                  className="py-2.5 px-4 bg-[#8B1E3F] hover:bg-[#6D1530] text-white font-semibold rounded-md flex items-center justify-center gap-1.5 tabular-nums"
                 >
-                  Close & Clear Session
+                  <PhoneCall className="w-3.5 h-3.5" />
+                  <span>Call Princess Maggie: 081 302 7763</span>
+                </a>
+                <a
+                  href={`mailto:${ROYAL_ORGANIZATION.contactEmail}?subject=${encodeURIComponent(
+                    `Confidential Support Request ${referenceId}`
+                  )}&body=${encodeURIComponent(
+                    `Reference: ${referenceId}\nName/Alias: ${formData.name}\nSafe Contact: ${formData.contactMethod} - ${formData.contactInfo}\nSafe Time: ${formData.safeTime}\nCode Word: ${formData.safeCodeWord || "None"}\nSupport Needed: ${formData.supportType}\nDetails: ${formData.details}`
+                  )}`}
+                  className="py-2.5 px-4 bg-[#4A1525] hover:bg-[#340C18] text-white font-semibold rounded-md flex items-center justify-center gap-1.5"
+                >
+                  <span>Send via Safe Email</span>
+                </a>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-stone-200">
+                <button
+                  type="button"
+                  onClick={handleCopyBrief}
+                  className="px-3 py-1.5 border border-stone-300 rounded-md text-xs font-medium text-stone-700 hover:bg-stone-50 flex items-center gap-1.5 cursor-pointer"
+                >
+                  {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedSummary ? "Copied Summary" : "Copy Request Summary"}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResetAndClose}
+                  className="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold rounded-md cursor-pointer"
+                >
+                  Clear Form & Close
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
                   Type of Assistance Required *
                 </label>
                 <select
                   value={formData.supportType}
                   onChange={(e) => setFormData({ ...formData, supportType: e.target.value })}
-                  className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs font-medium focus:ring-2 focus:ring-[#4A1525] focus:outline-none"
+                  className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs font-medium focus:ring-2 focus:ring-[#4A1525] focus:outline-none"
                 >
                   <option value="gbv-safe-haven">Safe Haven Shelter / Emergency Domestic Relocation</option>
                   <option value="trauma-counseling">Trauma Counseling & Psychological Support (Pastoral/Social Work)</option>
@@ -135,10 +202,10 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Maria or 'Sister M'"
+                    placeholder="e.g. Maria or Sister M"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   />
                 </div>
                 <div>
@@ -151,7 +218,7 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                     placeholder="082 123 4567"
                     value={formData.contactInfo}
                     onChange={(e) => setFormData({ ...formData, contactInfo: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs tabular-nums"
                   />
                 </div>
               </div>
@@ -162,7 +229,7 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                   <select
                     value={formData.contactMethod}
                     onChange={(e) => setFormData({ ...formData, contactMethod: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   >
                     <option value="whatsapp">Discreet WhatsApp Message</option>
                     <option value="phone">Phone Call Only</option>
@@ -175,7 +242,7 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                   <select
                     value={formData.safeTime}
                     onChange={(e) => setFormData({ ...formData, safeTime: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   >
                     <option value="Anytime">Anytime (Safe)</option>
                     <option value="Morning">Mornings (08:00 - 12:00)</option>
@@ -189,28 +256,28 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. 'Tulip' or 'Church'"
+                    placeholder="e.g. Tulip"
                     value={formData.safeCodeWord}
                     onChange={(e) => setFormData({ ...formData, safeCodeWord: e.target.value })}
-                    className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs"
+                    className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Brief Context / Urgency (Do not include sensitive names if monitored)
+                  Brief Context (Avoid names if your device is monitored)
                 </label>
                 <textarea
                   rows={3}
                   value={formData.details}
                   onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                  placeholder="Share what support you need or current location in Mid Ennerdale / Johannesburg..."
-                  className="w-full px-3 py-2 bg-white rounded border border-stone-300 text-xs resize-none"
+                  placeholder="Share what support you need or general area..."
+                  className="w-full px-3 py-2 bg-white rounded-md border border-stone-300 text-xs resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-2 p-2.5 bg-stone-100 rounded border border-stone-200">
+              <div className="flex items-center gap-2 p-2.5 bg-stone-100 rounded-md border border-stone-200">
                 <input
                   type="checkbox"
                   id="safetyCheck"
@@ -227,16 +294,16 @@ export const ConfidentialHelpModal: React.FC<ConfidentialHelpModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-xs font-medium text-stone-600 hover:text-stone-900"
+                  className="px-4 py-2 text-xs font-medium text-stone-600 hover:text-stone-900 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#8B1E3F] hover:bg-[#6D1530] text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2.5 bg-[#8B1E3F] hover:bg-[#6D1530] text-white text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Heart className="w-3.5 h-3.5 text-amber-200" />
-                  <span>Submit Confidential Request</span>
+                  <span>Prepare Confidential Request</span>
                 </button>
               </div>
             </form>

@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GALLERY_ITEMS } from "../data/organizationData";
-import { Camera, X, ZoomIn, Calendar, Tag, ChevronLeft, ChevronRight } from "lucide-react";
+import { Camera, X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { HeritageImage } from "../components/HeritageImage";
+import { PageHeroBanner } from "../components/PageHeroBanner";
 
 export const GalleryPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const categories = [
     "All",
@@ -22,13 +26,8 @@ export const GalleryPage: React.FC = () => {
     return item.category === selectedCategory;
   });
 
-  const openLightbox = (index: number) => {
-    setActiveLightboxIndex(index);
-  };
-
-  const closeLightbox = () => {
-    setActiveLightboxIndex(null);
-  };
+  const openLightbox = (index: number) => setActiveLightboxIndex(index);
+  const closeLightbox = () => setActiveLightboxIndex(null);
 
   const nextLightbox = () => {
     if (activeLightboxIndex !== null) {
@@ -42,143 +41,169 @@ export const GalleryPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (activeLightboxIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") nextLightbox();
+      if (e.key === "ArrowLeft") prevLightbox();
+      if (e.key === "Escape") closeLightbox();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [activeLightboxIndex, filteredItems.length]);
+
   return (
-    <div className="space-y-16 pb-16">
-      {/* Page Header */}
-      <section className="bg-gradient-to-b from-[#340B18] via-[#4A1525] to-[#2D0B16] text-white py-16 px-4 sm:px-6 border-b border-[#C59B27]/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-heritage-pattern opacity-10 pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/10 text-[#F3C969] text-xs font-semibold uppercase tracking-wider">
-            <Camera className="w-3.5 h-3.5" />
-            <span>Documentary Photographic Archives</span>
-          </div>
-          <h1 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
-            Royal Gatherings & Grassroots Impact
-          </h1>
-          <p className="text-sm sm:text-base text-stone-200 max-w-3xl leading-relaxed font-light">
-            Visual testimony of the Royal Sisterhood AK 1 to 4 Bloodline across South Africa: traditional royal councils, women in coding bootcamps, community agricultural hubs, and dignity parcel outreaches.
-          </p>
-        </div>
-      </section>
+    <div className="space-y-16 pb-20">
+      <PageHeroBanner
+        kickerIcon={<Camera className="w-4 h-4 shrink-0" />}
+        kickerText="Documentary Photographic Archives"
+        title="Royal Gatherings & Grassroots Impact"
+        subtitle="Visual testimony of the Royal Sisterhood AK 1 to 4 Bloodline across South Africa: traditional royal councils, official CIPC governance records, women in coding bootcamps, and dignity outreaches."
+      />
 
       {/* Gallery Filter & Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Category Pills */}
-        <div className="flex overflow-x-auto gap-2 pb-4 mb-8 border-b border-stone-200 no-scrollbar">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                selectedCategory === cat
-                  ? "bg-[#4A1525] text-white shadow-sm"
-                  : "bg-stone-100 text-stone-600 hover:text-stone-900"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Category Filter Buttons */}
+        <div className="flex overflow-x-auto gap-1.5 pb-4 mb-8 border-b border-stone-200 no-scrollbar">
+          {categories.map((cat) => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setActiveLightboxIndex(null);
+                }}
+                className={`relative px-3.5 py-2 rounded-md text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer border ${
+                  isSelected
+                    ? "text-white border-[#4A1525]"
+                    : "bg-white text-stone-700 border-stone-200 hover:border-stone-300"
+                }`}
+              >
+                {isSelected && (
+                  <motion.span
+                    layoutId={shouldReduceMotion ? undefined : "galleryCategoryIndicator"}
+                    transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-[#4A1525] rounded-md"
+                  />
+                )}
+                <span className="relative z-10">{cat}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Media Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item, idx) => (
-            <div
+            <button
               key={item.id}
+              type="button"
               onClick={() => openLightbox(idx)}
-              className="group bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between"
+              className="group text-left bg-white rounded-xl border border-stone-200 hover:border-[#C59B27]/60 overflow-hidden shadow-sm hover:shadow-md card-interactive cursor-pointer flex flex-col justify-between"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
-                <img
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 border-b border-stone-200">
+                <HeritageImage
                   src={item.image}
                   alt={item.title}
+                  fallbackLabel={item.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="px-3 py-1.5 bg-white/90 text-stone-900 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow">
+                  <span className="px-3.5 py-1.5 bg-white/95 text-stone-900 rounded-md text-xs font-semibold flex items-center gap-1.5 shadow">
                     <ZoomIn className="w-3.5 h-3.5" />
-                    <span>View High-Res</span>
-                  </div>
-                </div>
-                <div className="absolute top-3 left-3 px-2 py-0.5 bg-[#4A1525]/90 text-white text-[10px] font-mono uppercase tracking-wider rounded">
-                  {item.category}
+                    <span>Inspect Record</span>
+                  </span>
                 </div>
               </div>
 
-              <div className="p-5 space-y-2">
-                <h3 className="font-cinzel text-base font-bold text-stone-900 group-hover:text-[#4A1525] transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed">
-                  {item.caption}
-                </p>
-                <div className="pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>Archive {item.date}</span>
-                  </span>
-                  <span className="text-[#8B1E3F] font-semibold">Inspect Record</span>
+              <div className="p-5 space-y-2 flex-1 flex flex-col justify-between w-full">
+                <div>
+                  <div className="flex items-center gap-2 text-[11px] font-medium text-[#8B1E3F] mb-1">
+                    <span>{item.category}</span>
+                    <span aria-hidden="true" className="text-stone-400">·</span>
+                    <span className="text-stone-500 tabular-nums">{item.date}</span>
+                  </div>
+                  <h3 className="font-cinzel text-base font-bold text-stone-900 group-hover:text-[#4A1525] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-stone-600 line-clamp-3 mt-1.5 leading-relaxed">
+                    {item.caption}
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
+                  <span className="tabular-nums">Record 0{idx + 1}</span>
+                  <span className="text-[#8B1E3F] font-semibold">Open Lightbox →</span>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </section>
 
       {/* Lightbox Modal */}
       {activeLightboxIndex !== null && filteredItems[activeLightboxIndex] && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-label={filteredItems[activeLightboxIndex].title}
+        >
           <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-[#1A040B] rounded-xl overflow-hidden border border-[#C59B27]/40 shadow-2xl">
-            {/* Lightbox Header */}
             <div className="p-4 bg-[#2D0B16] text-white flex items-center justify-between border-b border-[#C59B27]/30">
-              <div className="flex items-center gap-2 text-xs font-mono text-[#F3C969]">
-                <Tag className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-2 text-xs font-medium text-[#F3C969] tabular-nums">
                 <span>{filteredItems[activeLightboxIndex].category}</span>
-                <span>·</span>
-                <span>{activeLightboxIndex + 1} of {filteredItems.length}</span>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {activeLightboxIndex + 1} of {filteredItems.length}
+                </span>
               </div>
               <button
+                type="button"
                 onClick={closeLightbox}
-                className="p-1 text-white/70 hover:text-white rounded hover:bg-white/10"
+                aria-label="Close lightbox"
+                className="p-1.5 text-white/80 hover:text-white rounded-md hover:bg-white/10 cursor-pointer"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Lightbox Image Stage */}
-            <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden min-h-[350px] max-h-[60vh]">
-              <img
+            <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden min-h-[340px] max-h-[60vh]">
+              <HeritageImage
                 src={filteredItems[activeLightboxIndex].image}
                 alt={filteredItems[activeLightboxIndex].title}
+                fallbackLabel={filteredItems[activeLightboxIndex].title}
                 className="w-full h-full object-contain"
               />
 
-              {/* Navigation arrows */}
               <button
+                type="button"
                 onClick={prevLightbox}
-                className="absolute left-3 p-2 rounded-full bg-black/60 text-white hover:bg-[#4A1525] transition-colors"
-                aria-label="Previous image"
+                className="absolute left-3 p-2.5 rounded-full bg-black/65 text-white hover:bg-[#4A1525] transition-colors cursor-pointer"
+                aria-label="Previous archive image"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
               <button
+                type="button"
                 onClick={nextLightbox}
-                className="absolute right-3 p-2 rounded-full bg-black/60 text-white hover:bg-[#4A1525] transition-colors"
-                aria-label="Next image"
+                className="absolute right-3 p-2.5 rounded-full bg-black/65 text-white hover:bg-[#4A1525] transition-colors cursor-pointer"
+                aria-label="Next archive image"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Lightbox Caption Box */}
             <div className="p-6 bg-[#240711] text-stone-200 space-y-2 border-t border-[#C59B27]/30">
               <h3 className="font-cinzel text-lg font-bold text-white">
                 {filteredItems[activeLightboxIndex].title}
               </h3>
-              <p className="text-xs text-stone-300 leading-relaxed max-w-3xl">
+              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed max-w-3xl">
                 {filteredItems[activeLightboxIndex].caption}
               </p>
-              <div className="pt-2 text-[11px] text-stone-500 font-mono">
+              <div className="pt-2 text-[11px] text-stone-400">
                 Official Royal Sisterhood AK 1 to 4 Bloodline Historical Archive
               </div>
             </div>

@@ -36,7 +36,6 @@ export interface FlagshipProgramme {
   objectives: string[];
   targetBeneficiaries: string;
   provinces: string;
-  fundingNeedZAR: string;
   image?: string;
 }
 
@@ -219,7 +218,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "Traditional councils, Griqua communities, diaspora families, and civic elders.",
     provinces: "National Coverage (Gauteng, Western Cape, Northern Cape, KZN, Free State)",
-    fundingNeedZAR: "R 2,400,000",
     image: griquaRoyalImbizoImg,
   },
   {
@@ -242,7 +240,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "Primary & secondary school learners, university researchers, and cultural historians.",
     provinces: "Gauteng, Northern Cape, Western Cape",
-    fundingNeedZAR: "R 1,650,000",
   },
   {
     id: "gbv-safe-haven-network",
@@ -264,7 +261,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "Women, adolescent girls, and children subjected to domestic abuse and trauma.",
     provinces: "Gauteng (Mid Ennerdale, Eldorado Park, Orange Farm) & Northern Cape",
-    fundingNeedZAR: "R 3,800,000",
   },
   {
     id: "women-economic-tech-hub",
@@ -286,7 +282,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "Unemployed youth (18–35), single mothers, and aspiring female entrepreneurs.",
     provinces: "Gauteng & National Online Cohorts",
-    fundingNeedZAR: "R 4,200,000",
     image: womenDigitalHubImg,
   },
   {
@@ -309,7 +304,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "Pensioners, child-headed households, school-going girls, and destitute families.",
     provinces: "Gauteng, Free State, and Northern Cape",
-    fundingNeedZAR: "R 2,100,000",
     image: communityDignityDriveImg,
   },
   {
@@ -332,7 +326,6 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     ],
     targetBeneficiaries: "At-risk youth, young men susceptible to gang recruitment, and fractured family units.",
     provinces: "Gauteng & Western Cape",
-    fundingNeedZAR: "R 1,500,000",
   },
 ];
 

@@ -1,7 +1,8 @@
 import React from "react";
-import { ShieldCheck, MapPin, Mail, Phone, HeartHandshake, Crown, ExternalLink } from "lucide-react";
+import { MapPin, Mail, Phone, Crown } from "lucide-react";
 import { ROYAL_ORGANIZATION, STRATEGIC_PARTNERS } from "../data/organizationData";
 import { PageId } from "./Navbar";
+import { HeritageImage } from "./HeritageImage";
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -15,36 +16,38 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenConfidentialHelp,
 }) => {
   return (
-    <footer className="bg-[#240711] text-stone-300 border-t-2 border-[#C59B27]/40 text-xs">
+    <footer className="bg-[#240711] text-stone-300 border-t border-[#C59B27]/40 text-xs">
       {/* Top Banner in Footer: Institutional Assurance */}
       <div className="border-b border-stone-800 bg-[#1D050D] py-6 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#4A1525] border border-[#C59B27] flex items-center justify-center shrink-0">
-              <Crown className="w-5 h-5 text-[#C59B27]" />
+            <div className="w-10 h-10 rounded-full bg-[#4A1525] border border-[#C59B27]/60 flex items-center justify-center shrink-0">
+              <Crown className="w-5 h-5 text-[#F3C969]" />
             </div>
             <div>
               <h4 className="font-cinzel text-white text-sm font-bold">
                 Royal Governance & Traditional Accountability
               </h4>
-              <p className="text-[11px] text-stone-400">
-                Operating with direct mandate from the Griqua Royal House and the Royal Princesses of King Adam Kok V.
+              <p className="text-xs text-stone-300 mt-0.5">
+                Direct institutional mandate from the Griqua Royal House and the Royal Princesses of King Adam Kok V.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
+              type="button"
               onClick={onOpenConfidentialHelp}
-              className="px-3.5 py-1.5 bg-[#8B1E3F] hover:bg-[#6D1530] text-white text-xs font-semibold rounded transition-colors"
+              className="px-4 py-2 bg-[#8B1E3F] hover:bg-[#6D1530] text-white text-xs font-semibold rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Emergency GBV Desk
             </button>
             <button
+              type="button"
               onClick={onOpenDonate}
-              className="px-4 py-1.5 bg-[#C59B27] hover:bg-[#B08920] text-stone-950 text-xs font-bold rounded shadow transition-colors"
+              className="px-4 py-2 bg-[#C59B27] hover:bg-[#B08920] text-stone-950 text-xs font-bold rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Corporate CSI / Grants
+              Capitec EFT & CSI Grants
             </button>
           </div>
         </div>
@@ -55,10 +58,11 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Col 1 & 2: Brand & Legal */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-lg bg-white flex items-center justify-center p-1 border border-[#C59B27]/50 overflow-hidden shrink-0">
-              <img
+            <div className="w-12 h-12 rounded-md bg-white flex items-center justify-center p-1 border border-[#C59B27]/50 overflow-hidden shrink-0">
+              <HeritageImage
                 src="/drive_assets/royal_sisterhood_official_crest.jpg"
                 alt="Royal Sisterhood AK 1 to 4 Seal"
+                fallbackLabel="AK 1–4"
                 className="w-full h-full object-contain"
               />
             </div>
@@ -66,17 +70,17 @@ export const Footer: React.FC<FooterProps> = ({
               <span className="font-cinzel font-bold text-base text-white block leading-tight">
                 Royal Sisterhood AK 1 to 4 Bloodline
               </span>
-              <span className="text-[11px] font-mono text-[#F3C969] block">
+              <span className="text-xs font-mono text-[#F3C969] tabular-nums block mt-0.5">
                 CIPC Reg: {ROYAL_ORGANIZATION.registrationNumber}
               </span>
             </div>
           </div>
 
-          <p className="text-xs text-stone-400 leading-relaxed max-w-sm">
-            A premier South African non-profit institution founded by the Royal Princesses and sisters of King Adam Kok V. Championing the constitutional dignity of the Griqua nation, pioneering digital & agri-business empowerment for women, and delivering frontline emergency action against Gender-Based Violence.
+          <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
+            A South African non-profit institution founded by the Royal Princesses and sisters of King Adam Kok V—championing Griqua constitutional dignity, digital and enterprise empowerment, and frontline anti-GBV protection.
           </p>
 
-          <div className="space-y-1.5 text-xs text-stone-400 pt-1">
+          <div className="space-y-2 text-xs text-stone-300 pt-1">
             <div className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-[#C59B27] shrink-0 mt-0.5" />
               <span>
@@ -85,15 +89,18 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-[#C59B27] shrink-0" />
-              <a href={`mailto:${ROYAL_ORGANIZATION.contactEmail}`} className="hover:text-white transition-colors underline">
+              <a
+                href={`mailto:${ROYAL_ORGANIZATION.contactEmail}`}
+                className="hover:text-white transition-colors underline"
+              >
                 {ROYAL_ORGANIZATION.contactEmail}
               </a>
             </div>
             <div className="flex items-start gap-2">
               <Phone className="w-4 h-4 text-[#C59B27] shrink-0 mt-0.5" />
-              <div className="space-y-0.5">
+              <div className="space-y-1 tabular-nums">
                 <a href="tel:0813027763" className="block hover:text-white transition-colors">
-                  Princess Maggie Gibbs: 081 302 7763
+                  Princess Maggie Kok Gibbs: 081 302 7763
                 </a>
                 <a href="tel:0665862829" className="block hover:text-white transition-colors">
                   Princess Cornelia Eva Julius: 066 586 2829
@@ -105,18 +112,19 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 3: Strategic Ecosystem */}
         <div className="space-y-3">
-          <h5 className="font-cinzel font-bold text-white text-xs uppercase tracking-widest text-[#F3C969]">
+          <h5 className="font-cinzel font-bold text-xs tracking-wider text-[#F3C969]">
             Strategic Ecosystem
           </h5>
-          <ul className="space-y-2 text-xs">
+          <ul className="space-y-2.5 text-xs">
             {STRATEGIC_PARTNERS.map((partner) => (
               <li key={partner.id}>
                 <button
+                  type="button"
                   onClick={() => onNavigate("partners")}
-                  className="text-left hover:text-[#F3C969] transition-colors"
+                  className="text-left hover:text-[#F3C969] transition-colors cursor-pointer"
                 >
-                  <span className="block font-medium text-stone-200">{partner.name}</span>
-                  <span className="block text-[10px] text-stone-500">{partner.badge}</span>
+                  <span className="block font-medium text-stone-100">{partner.name}</span>
+                  <span className="block text-[11px] text-stone-400">{partner.badge}</span>
                 </button>
               </li>
             ))}
@@ -125,13 +133,13 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Col 4: Institutional Navigation */}
         <div className="space-y-3">
-          <h5 className="font-cinzel font-bold text-white text-xs uppercase tracking-widest text-[#F3C969]">
+          <h5 className="font-cinzel font-bold text-xs tracking-wider text-[#F3C969]">
             Institutional Pages
           </h5>
           <ul className="space-y-2 text-xs">
             {[
               { id: "home" as PageId, label: "Institutional Overview" },
-              { id: "leadership" as PageId, label: "Adam Kok I–IV Lineage" },
+              { id: "leadership" as PageId, label: "Adam Kok I–V Lineage" },
               { id: "programmes" as PageId, label: "6 Flagship Programmes" },
               { id: "support" as PageId, label: "GBV Emergency & Safe Havens" },
               { id: "fund-us" as PageId, label: "CSI & Donor Due Diligence" },
@@ -140,8 +148,9 @@ export const Footer: React.FC<FooterProps> = ({
             ].map((link) => (
               <li key={link.id}>
                 <button
+                  type="button"
                   onClick={() => onNavigate(link.id)}
-                  className="hover:text-white transition-colors"
+                  className="text-stone-300 hover:text-white transition-colors cursor-pointer"
                 >
                   {link.label}
                 </button>
@@ -150,40 +159,46 @@ export const Footer: React.FC<FooterProps> = ({
           </ul>
         </div>
 
-        {/* Col 5: Governance & Compliance */}
+        {/* Col 5: Treasury & Governance */}
         <div className="space-y-3">
-          <h5 className="font-cinzel font-bold text-white text-xs uppercase tracking-widest text-[#F3C969]">
-            Compliance Badges
+          <h5 className="font-cinzel font-bold text-xs tracking-wider text-[#F3C969]">
+            Treasury & Compliance
           </h5>
-          <div className="space-y-2 text-xs">
-            <div className="p-2 bg-[#2D0B16] rounded border border-stone-800">
-              <span className="font-semibold text-white block">CIPC Reg: K2025191780</span>
-              <span className="text-[10px] text-stone-400">Companies and Intellectual Property Commission</span>
+          <dl className="space-y-2.5 text-xs border-t border-stone-800 pt-2.5 divide-y divide-stone-800/80">
+            <div className="pb-2">
+              <dt className="font-semibold text-white">CIPC Registration</dt>
+              <dd className="text-[11px] text-stone-400 tabular-nums mt-0.5">
+                {ROYAL_ORGANIZATION.registrationNumber} ({ROYAL_ORGANIZATION.cipcCode})
+              </dd>
             </div>
-            <div className="p-2 bg-[#2D0B16] rounded border border-stone-800">
-              <span className="font-semibold text-white block">POPIA Compliant</span>
-              <span className="text-[10px] text-stone-400">Protection of Personal Information Act 4 of 2013</span>
+            <div className="pb-2">
+              <dt className="font-semibold text-white">Capitec Bank Treasury</dt>
+              <dd className="text-[11px] text-stone-400 tabular-nums mt-0.5">
+                Acc {ROYAL_ORGANIZATION.bankingDetails.accountNumber} · Branch {ROYAL_ORGANIZATION.bankingDetails.branchCode}
+              </dd>
             </div>
-            <div className="p-2 bg-[#2D0B16] rounded border border-stone-800">
-              <span className="font-semibold text-white block">Anti-GBV Safeguarding</span>
-              <span className="text-[10px] text-stone-400">Standardized Survivor Protection Protocol</span>
+            <div>
+              <dt className="font-semibold text-white">Statutory Standards</dt>
+              <dd className="text-[11px] text-stone-400 mt-0.5">
+                POPIA Act 4 of 2013 · Board Anti-GBV Safeguarding
+              </dd>
             </div>
-          </div>
+          </dl>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-stone-800/80 bg-[#17030A] py-5 px-4 sm:px-6 text-[11px] text-stone-500">
+      <div className="border-t border-stone-800/80 bg-[#17030A] py-5 px-4 sm:px-6 text-[11px] text-stone-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <p>
-            © 2025–2026 Royal Sisterhood AK 1 to 4 Bloodline (NPC). All sovereign and institutional rights reserved.
+            © 2025–2026 Royal Sisterhood AK 1 to 4 Bloodline (NPC). All institutional rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <span>Mid Ennerdale, Johannesburg</span>
-            <span>·</span>
+            <span aria-hidden="true">·</span>
             <span>Traditional Governance</span>
-            <span>·</span>
-            <span>B-BBEE / CSI Grant Compliant</span>
+            <span aria-hidden="true">·</span>
+            <span>CSI & Grant Compliant</span>
           </div>
         </div>
       </div>
