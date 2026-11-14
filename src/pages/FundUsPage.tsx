@@ -80,7 +80,7 @@ export const FundUsPage: React.FC<FundUsPageProps> = ({ onOpenEft, onOpenDonorPa
                 <p><strong>Physical Address:</strong> {ROYAL_ORGANIZATION.headquarters.address}</p>
                 <p><strong>Domicile:</strong> Mid Ennerdale, Johannesburg, Gauteng (1830)</p>
                 <p><strong>Royal Patronage:</strong> King Adam Kok V & Founding Princesses</p>
-                <p><strong>Bank Account:</strong> Ring-fenced FNB / Standard Bank Project Treasury</p>
+                <p><strong>Bank Account:</strong> {ROYAL_ORGANIZATION.bankingDetails.bankName} · Acc: {ROYAL_ORGANIZATION.bankingDetails.accountNumber} · Branch: {ROYAL_ORGANIZATION.bankingDetails.branchCode}</p>
               </div>
             </div>
 

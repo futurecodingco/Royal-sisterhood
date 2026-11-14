@@ -226,9 +226,14 @@ export const ContactPage: React.FC = () => {
 
                 <div className="flex items-start gap-2.5">
                   <Phone className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="block text-stone-900">Secretariat Switchboard:</strong>
-                    <span>{ROYAL_ORGANIZATION.secretariatPhone}</span>
+                  <div className="space-y-1">
+                    <strong className="block text-stone-900">Founding Directors Direct Contact:</strong>
+                    <a href="tel:0813027763" className="block hover:text-[#4A1525] underline">
+                      Princess Maggie Gibbs: 081 302 7763
+                    </a>
+                    <a href="tel:0665862829" className="block hover:text-[#4A1525] underline">
+                      Princess Cornelia Eva Julius: 066 586 2829
+                    </a>
                   </div>
                 </div>
 

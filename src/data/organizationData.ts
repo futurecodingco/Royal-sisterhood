@@ -1,3 +1,7 @@
+import griquaRoyalImbizoImg from "../assets/images/griqua_royal_imbizo_1794486836205.jpg";
+import womenDigitalHubImg from "../assets/images/women_digital_hub_1794486836687.jpg";
+import communityDignityDriveImg from "../assets/images/community_dignity_drive_1794486836033.jpg";
+
 export interface RoyalPrincess {
   id: string;
   name: string;
@@ -8,6 +12,7 @@ export interface RoyalPrincess {
   quote: string;
   focusAreas: string[];
   portrait: string;
+  phone?: string;
   fullPhoto?: string;
   familyTreePhoto?: string;
 }
@@ -74,15 +79,15 @@ export const ROYAL_ORGANIZATION = {
   leadershipTitle: "Direct Royal House Stewardship",
   patronage: "Under the Blessing & Lineage of King Adam Kok V",
   contactEmail: "futurecodecorp@gmail.com",
-  secretariatPhone: "+27 (0)11 855 2445",
+  secretariatPhone: "081 302 7763 / 066 586 2829",
   emergencyCrisisLine: "0800 428 428",
   bankingDetails: {
-    bankName: "First National Bank (FNB) / Standard Bank South Africa",
+    bankName: "Capitec Bank South Africa",
     accountName: "Royal Sisterhood AK 1 to 4 Bloodline",
-    accountType: "Public Benefit / Business Cheque Account",
-    accountNumber: "63089452178",
-    branchCode: "250655",
-    swiftCode: "FIRNZAJJ",
+    accountType: "Capitec Account",
+    accountNumber: "1055214607",
+    branchCode: "470010",
+    swiftCode: "CABLZAJJ",
     referenceFormat: "DONOR-NAME or CSI-ORGANISATION",
   },
 };
@@ -90,14 +95,15 @@ export const ROYAL_ORGANIZATION = {
 export const ROYAL_PRINCESSES: RoyalPrincess[] = [
   {
     id: "eva-cornelia-julius",
-    name: "Princess Cornelia Kok Julius",
+    name: "Princess Cornelia Eva Julius",
     title: "Her Royal Highness Princess Cornelia",
     role: "Founding Director & Head of Royal Governance",
     royalRelation: "Sister of King Adam Kok V | Direct Bloodline of Kaptein Adam Kok I-IV",
     portrait: "/drive_assets/portrait_princess_cornelia.jpg",
+    phone: "066 586 2829",
     fullPhoto: "/drive_assets/three_princesses_full_standing.jpg",
     familyTreePhoto: "/drive_assets/princess_cornelia_julius_family.jpg",
-    bio: "Princess Cornelia Kok Julius stands as a cornerstone of the modern Griqua Royal House. Carrying centuries of royal heritage and grassroots service, Her Royal Highness steers institutional governance, diplomatic liaison with traditional councils across South Africa's nine provinces, and policy advocacy for the constitutional recognition and socio-economic elevation of indigenous Khoisan-Griqua families.",
+    bio: "Princess Cornelia Eva Julius stands as a cornerstone of the modern Griqua Royal House. Carrying centuries of royal heritage and grassroots service, Her Royal Highness steers institutional governance, diplomatic liaison with traditional councils across South Africa's nine provinces, and policy advocacy for the constitutional recognition and socio-economic elevation of indigenous Khoisan-Griqua families.",
     quote: "Our bloodline is not a title of detachment; it is an ancestral covenant of servitude to our women, our youth, and the sacred soil of our people.",
     focusAreas: [
       "Traditional Council Diplomatic Relations",
@@ -113,6 +119,7 @@ export const ROYAL_PRINCESSES: RoyalPrincess[] = [
     role: "Founding Director & Head of Community Welfare & Dignity",
     royalRelation: "Sister of King Adam Kok V | Direct Bloodline of Kaptein Adam Kok I-IV",
     portrait: "/drive_assets/portrait_princess_maggie.jpg",
+    phone: "081 302 7763",
     fullPhoto: "/drive_assets/three_princesses_full_standing.jpg",
     bio: "Princess Maggie Kok Gibbs is the compassionate operational heart of the Sisterhood, directing field-level relief, safe-haven networks, and humanitarian outreach. Her work in Mid Ennerdale and surrounding peri-urban townships has saved hundreds of vulnerable women and orphaned children through emergency sheltering, food garden cultivation, and trauma-informed family restoration.",
     quote: "No mother in our communities should ever weep in hunger or live in fear of violence under the open skies of our motherland.",
@@ -213,7 +220,7 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     targetBeneficiaries: "Traditional councils, Griqua communities, diaspora families, and civic elders.",
     provinces: "National Coverage (Gauteng, Western Cape, Northern Cape, KZN, Free State)",
     fundingNeedZAR: "R 2,400,000",
-    image: "/src/assets/images/griqua_royal_imbizo_1794486836205.jpg",
+    image: griquaRoyalImbizoImg,
   },
   {
     id: "heritage-youth-archive",
@@ -280,7 +287,7 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     targetBeneficiaries: "Unemployed youth (18–35), single mothers, and aspiring female entrepreneurs.",
     provinces: "Gauteng & National Online Cohorts",
     fundingNeedZAR: "R 4,200,000",
-    image: "/src/assets/images/women_digital_hub_1794486836687.jpg",
+    image: womenDigitalHubImg,
   },
   {
     id: "food-security-dignity-drive",
@@ -303,7 +310,7 @@ export const FLAGSHIP_PROGRAMMES: FlagshipProgramme[] = [
     targetBeneficiaries: "Pensioners, child-headed households, school-going girls, and destitute families.",
     provinces: "Gauteng, Free State, and Northern Cape",
     fundingNeedZAR: "R 2,100,000",
-    image: "/src/assets/images/community_dignity_drive_1794486836033.jpg",
+    image: communityDignityDriveImg,
   },
   {
     id: "spiritual-healing-mentorship",
@@ -550,7 +557,7 @@ export const GALLERY_ITEMS = [
     category: "Digital & Youth Hub",
     date: "2025",
     caption: "Young Griqua women in Mid Ennerdale mastering modern software development and web design on laptops provided through the Future Coding Corp technical alliance.",
-    image: "/src/assets/images/women_digital_hub_1794486836687.jpg",
+    image: womenDigitalHubImg,
   },
   {
     id: "gal-food-drive",
@@ -558,7 +565,7 @@ export const GALLERY_ITEMS = [
     category: "Community Welfare",
     date: "2025",
     caption: "Community matriarchs and volunteers packaging fresh, organically harvested vegetables and essential sanitary dignity kits for vulnerable families in Mid Ennerdale.",
-    image: "/src/assets/images/community_dignity_drive_1794486836033.jpg",
+    image: communityDignityDriveImg,
   },
   {
     id: "gal-imbizo",
@@ -566,7 +573,7 @@ export const GALLERY_ITEMS = [
     category: "Royal Leadership",
     date: "2025",
     caption: "Traditional leaders, royal elders, and matriarchs gathered under the pavilion for the national unification summit, reaffirming indigenous cultural autonomy and communal peace.",
-    image: "/src/assets/images/griqua_royal_imbizo_1794486836205.jpg",
+    image: griquaRoyalImbizoImg,
   },
 ];
 

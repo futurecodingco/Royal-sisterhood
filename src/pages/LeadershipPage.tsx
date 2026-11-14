@@ -200,9 +200,17 @@ export const LeadershipPage: React.FC<LeadershipPageProps> = ({ onNavigate, onOp
                 <p className="text-[11px] text-stone-500 font-medium mt-0.5">
                   Direct Descendant of Adam Kok I–IV
                 </p>
-                <div className="mt-3 pt-3 border-t border-stone-200 w-full text-xs text-stone-600">
+                <div className="mt-3 pt-3 border-t border-stone-200 w-full text-xs text-stone-600 space-y-1">
                   <span className="font-semibold text-[#8B1E3F]">Founding Director</span>
-                  <span className="block text-[11px] text-stone-500 mt-0.5">Royal Sisterhood AK 1 to 4 Bloodline</span>
+                  <span className="block text-[11px] text-stone-500">Royal Sisterhood AK 1 to 4 Bloodline</span>
+                  {princess.phone && (
+                    <a
+                      href={`tel:${princess.phone.replace(/\s+/g, "")}`}
+                      className="inline-block mt-1 font-mono text-xs font-semibold text-[#4A1525] hover:underline"
+                    >
+                      Tel: {princess.phone}
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

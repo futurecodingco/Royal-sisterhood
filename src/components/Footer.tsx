@@ -89,9 +89,16 @@ export const Footer: React.FC<FooterProps> = ({
                 {ROYAL_ORGANIZATION.contactEmail}
               </a>
             </div>
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-[#C59B27] shrink-0" />
-              <span>{ROYAL_ORGANIZATION.secretariatPhone} (Secretariat)</span>
+            <div className="flex items-start gap-2">
+              <Phone className="w-4 h-4 text-[#C59B27] shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <a href="tel:0813027763" className="block hover:text-white transition-colors">
+                  Princess Maggie Gibbs: 081 302 7763
+                </a>
+                <a href="tel:0665862829" className="block hover:text-white transition-colors">
+                  Princess Cornelia Eva Julius: 066 586 2829
+                </a>
+              </div>
             </div>
           </div>
         </div>
